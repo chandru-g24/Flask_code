@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h2>Leads</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Lead Name</th>
+                <th>Customer Name</th>
+                <th>Model</th>
+                <th>Variant</th>
+                <th>Salesman</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lead in leads %}
+                <tr>
+                    <td>{{ lead.name }}</td>
+                    <td>{{ lead.customer_name }}</td>
+                    <td>{{ lead.model }}</td>
+                    <td>{{ lead.variant }}</td>
+                    <td>{{ lead.salesman }}</td>
+                    <td>
+                        <a class="button" href="{{ url_for('edit_lead', name=lead.name, phone=lead.customer_phone) }}">Edit</a>
+                        <a class="button" href="{{ url_for('delete_lead', name=lead.name, phone=lead.customer_phone) }}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a class="button" href="{{ url_for('add_lead') }}">Add Lead</a>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h2>Edit Lead</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="customer_name">Customer Name</label>
+            <input type="text" id="customer_name" name="customer_name" value="{{ customer['name'] }}" required>
+        </div>
+        <div class="form-group">
+            <label for="customer_phone">Customer Phone</label>
+            <input type="text" id="customer_phone" name="customer_phone" value="{{ customer['phone_number'] }}" required>
+        </div>
+        <div class="form-group">
+            <label for="customer_location">Customer Location</label>
+            <select id="customer_location" name="customer_location" required>
+                <option value="Dubai" {% if customer['location'] == 'Dubai' %}selected{% endif %}>Dubai</option>
+                <option value="Kuwait" {% if customer['location'] == 'Kuwait' %}selected{% endif %}>Kuwait</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lead_type">Lead Type</label>
+            <select id="lead_type" name="lead_type" required>
+                <option value="Financial Request" {% if lead['leadtype'] == 'Financial Request' %}selected{% endif %}>Financial Request</option>
+                <option value="Test Drive Request" {% if lead['leadtype'] == 'Test Drive Request' %}selected{% endif %}>Test Drive Request</option>
+                <option value="Showroom Visit" {% if lead['leadtype'] == 'Showroom Visit' %}selected{% endif %}>Showroom Visit</option>
+                <option value="Quotation Request" {% if lead['leadtype'] == 'Quotation Request' %}selected{% endif %}>Quotation Request</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="model">Model</label>
+            <select id="model" name="model" required>
+                {% for model in models %}
+                    <option value="{{ model }}" {% if lead['model'] == model %}selected{% endif %}>{{ model }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="variant">Variant</label>
+            <select id="variant" name="variant" required>
+                {% for variant in variants %}
+                    <option value="{{ variant }}" {% if lead['variant'] == variant %}selected{% endif %}>{{ variant }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="touch_point">Touch Point</label>
+            <select id="touch_point" name="touch_point" required>
+                <option value="Online" {% if lead['touchpoint'] == 'Online' %}selected{% endif %}>Online</option>
+                <option value="By Person" {% if lead['touchpoint'] == 'By Person' %}selected{% endif %}>By Person</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="business_source">Business Source</label>
+            <select id="business_source" name="business_source" required>
+                <option value="Instagram" {% if lead['source'] == 'Instagram' %}selected{% endif %}>Instagram</option>
+                <option value="Facebook" {% if lead['source'] == 'Facebook' %}selected{% endif %}>Facebook</option>
+                <option value="Whatsapp" {% if lead['source'] == 'Whatsapp' %}selected{% endif %}>Whatsapp</option>
+                <option value="Google" {% if lead['source'] == 'Google' %}selected{% endif %}>Google</option>
+                <option value="Walk In" {% if lead['source'] == 'Walk In' %}selected{% endif %}>Walk In</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lead_quality">Lead Quality</label>
+            <select id="lead_quality" name="lead_quality" required>
+                <option value="Low" {% if lead['level'] == 'Low' %}selected{% endif %}>Low</option>
+                <option value="Medium" {% if lead['level'] == 'Medium' %}selected{% endif %}>Medium</option>
+                <option value="High" {% if lead['level'] == 'High' %}selected{% endif %}>High</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="salesman">Salesman</label>
+            <select id="salesman" name="salesman" required>
+                {% for salesman in salesmen %}
+                    <option value="{{ salesman }}" {% if lead['salesman'] == salesman %}selected{% endif %}>{{ salesman }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit">Update</button>
+    </form>
+{% endblock %}

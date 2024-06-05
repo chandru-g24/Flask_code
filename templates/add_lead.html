@@ -1,0 +1,131 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h2>Add Lead</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="customer_name">Customer Name</label>
+            <input type="text" id="customer_name" name="customer_name" required>
+        </div>
+        <div class="form-group">
+            <label for="customer_phone">Customer Phone</label>
+            <input type="text" id="customer_phone" name="customer_phone" pattern="[0-9]{10}" title="Please enter a 10-digit phone number" required>
+        </div>
+        <div class="form-group">
+            <label for="customer_location">Customer Location</label>
+            <select id="customer_location" name="customer_location" required>
+                <option value="Dubai">Dubai</option>
+                <option value="Kuwait">Kuwait</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lead_type">Lead Type</label>
+            <select id="lead_type" name="lead_type" required>
+                <option value="Financial Request">Financial Request</option>
+                <option value="Test Drive Request">Test Drive Request</option>
+                <option value="Showroom Visit">Showroom Visit</option>
+                <option value="Quotation Request">Quotation Request</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="model">Model</label>
+            <select id="model" name="model" required>
+                {% for model in models %}
+                    <option value="{{ model }}">{{ model }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="variant">Variant</label>
+            <select id="variant" name="variant" required>
+                <!-- Variants will be loaded dynamically based on model selection -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="touch_point">Touch Point</label>
+            <select id="touch_point" name="touch_point" required>
+                <option value="Online">Online</option>
+                <option value="By Person">By Person</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="business_source">Business Source</label>
+            <select id="business_source" name="business_source" required>
+                <option value="Instagram">Instagram</option>
+                <option value="Facebook">Facebook</option>
+                <option value="Whatsapp">Whatsapp</option>
+                <option value="Google">Google</option>
+                <option value="Walk In">Walk In</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lead_quality">Lead Quality</label>
+            <select id="lead_quality" name="lead_quality" required>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="salesman">Salesman</label>
+            <select id="salesman" name="salesman" required>
+                <!-- Salesmen will be loaded dynamically based on model and location selection -->
+            </select>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modelSelect = document.getElementById('model');
+            const variantSelect = document.getElementById('variant');
+            const locationSelect = document.getElementById('customer_location');
+            const qualitySelect = document.getElementById('lead_quality');
+            const salesmanSelect = document.getElementById('salesman');
+
+            function fetchVariants() {
+                const model = modelSelect.value;
+
+                fetch(`/get_variants?model=${model}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        variantSelect.innerHTML = '';
+                        data.variants.forEach(variant => {
+                            const option = document.createElement('option');
+                            option.value = variant;
+                            option.textContent = variant;
+                            variantSelect.appendChild(option);
+                        });
+                    });
+            }
+
+            function fetchSalesmen() {
+                const model = modelSelect.value;
+                const location = locationSelect.value;
+                const quality = qualitySelect.value;
+
+                fetch(`/get_salesmen?model=${model}&location=${location}&quality=${quality}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        salesmanSelect.innerHTML = '';
+                        data.salesmen.forEach(salesman => {
+                            const option = document.createElement('option');
+                            option.value = salesman;
+                            option.textContent = salesman;
+                            salesmanSelect.appendChild(option);
+                        });
+                    });
+            }
+
+            modelSelect.addEventListener('change', () => {
+                fetchVariants();
+                fetchSalesmen();
+            });
+            locationSelect.addEventListener('change', fetchSalesmen);
+            qualitySelect.addEventListener('change', fetchSalesmen);
+
+            // Initial fetch
+            fetchVariants();
+            fetchSalesmen();
+        });
+    </script>
+{% endblock %}
